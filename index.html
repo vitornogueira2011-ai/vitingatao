@@ -1,0 +1,612 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Natureza | Explore o Mundo</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+    background: #081713;
+    color: white;
+}
+
+/* CABEÇALHO */
+header {
+    min-height: 400px;
+    padding: 35px 8%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background:
+    linear-gradient(90deg, rgba(0,0,0,.75), rgba(0,0,0,.15)),
+    url('https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=1800')
+    center/cover;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.logo span {
+    color: #7de0a2;
+}
+
+.favorites-counter {
+    background: rgba(255,255,255,.15);
+    padding: 10px 18px;
+    border-radius: 30px;
+}
+
+.hero {
+    max-width: 650px;
+    margin-bottom: 25px;
+}
+
+.hero small {
+    color: #91e5b1;
+    letter-spacing: 4px;
+    font-weight: bold;
+}
+
+.hero h1 {
+    font-size: clamp(38px, 7vw, 70px);
+    margin: 15px 0;
+    line-height: 1.1;
+}
+
+.hero p {
+    color: #e1e9e4;
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+/* CONTEÚDO */
+main {
+    max-width: 1250px;
+    margin: auto;
+    padding: 45px 25px;
+}
+
+.section-title {
+    margin-bottom: 25px;
+}
+
+.section-title h2 {
+    font-size: 30px;
+}
+
+.section-title p {
+    color: #9cafa5;
+    margin-top: 8px;
+}
+
+/* PESQUISA */
+.search-area {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.search-area input {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #315044;
+    background: #142820;
+    color: white;
+    outline: none;
+    font-size: 15px;
+}
+
+.search-area input:focus {
+    border-color: #7de0a2;
+}
+
+/* FILTROS */
+.filters {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.filters button {
+    border: 1px solid #385b49;
+    background: #142820;
+    color: white;
+    padding: 11px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.filters button:hover,
+.filters button.active {
+    background: #75d99b;
+    color: #092016;
+    border-color: #75d99b;
+}
+
+/* GALERIA */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.photo-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 17px;
+    background: #142820;
+    cursor: pointer;
+    transition: .3s;
+    animation: appear .5s ease;
+}
+
+.photo-card:hover {
+    transform: translateY(-7px);
+}
+
+.photo-card img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    display: block;
+    transition: .5s;
+}
+
+.photo-card:hover img {
+    transform: scale(1.06);
+}
+
+.photo-info {
+    padding: 17px;
+}
+
+.photo-info h3 {
+    font-size: 19px;
+    margin-bottom: 6px;
+}
+
+.photo-info p {
+    color: #9cafa5;
+    font-size: 13px;
+}
+
+.favorite {
+    position: absolute;
+    top: 13px;
+    right: 13px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0,0,0,.55);
+    color: white;
+    font-size: 21px;
+    cursor: pointer;
+    z-index: 2;
+    transition: .2s;
+}
+
+.favorite.active {
+    background: #e84d65;
+}
+
+.favorite:hover {
+    transform: scale(1.12);
+}
+
+/* MODAL */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.92);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    z-index: 10;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    max-width: 850px;
+    width: 100%;
+    text-align: center;
+}
+
+.modal img {
+    max-width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: 12px;
+}
+
+.modal h2 {
+    margin: 15px 0 5px;
+}
+
+.modal p {
+    color: #b9c9bf;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 35px;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* RODAPÉ */
+footer {
+    text-align: center;
+    padding: 30px;
+    color: #91a69a;
+    border-top: 1px solid #294235;
+}
+
+.empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 50px;
+    color: #a9bdb0;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* RESPONSIVIDADE */
+@media(max-width: 800px) {
+    .gallery {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 550px) {
+    header {
+        min-height: 360px;
+        padding: 25px 6%;
+    }
+
+    .logo {
+        font-size: 19px;
+    }
+
+    .favorites-counter {
+        font-size: 12px;
+        padding: 9px;
+    }
+
+    .gallery {
+        grid-template-columns: 1fr;
+    }
+
+    .photo-card img {
+        height: 240px;
+    }
+
+    main {
+        padding: 35px 18px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <nav>
+        <div class="logo">NATUREZA<span>.</span></div>
+
+        <div class="favorites-counter">
+            ❤️ Favoritos: <strong id="favoriteCount">0</strong>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <small>DESCUBRA A BELEZA DO PLANETA</small>
+        <h1>Vitin é uma obra de Arte.</h1>
+        <p>
+            Explore paisagens incríveis, descubra lugares
+            extraordinários e aprecie a beleza do nosso mundo.
+        </p>
+    </div>
+</header>
+
+<main>
+
+    <div class="section-title">
+        <h2>Explore as paisagens</h2>
+        <p>Escolha uma categoria e descubra novas fotografias.</p>
+    </div>
+
+    <div class="search-area">
+        <input
+            type="text"
+            id="search"
+            placeholder="🔍 Pesquisar uma paisagem..."
+        >
+    </div>
+
+    <div class="filters">
+        <button class="active" data-category="todos">Todas</button>
+        <button data-category="montanhas">⛰️ Montanhas</button>
+        <button data-category="florestas">🌳 Florestas</button>
+        <button data-category="praias">🏖️ Praias</button>
+        <button data-category="cachoeiras">💧 Cachoeiras</button>
+        <button data-category="favoritos">❤️ Favoritos</button>
+    </div>
+
+    <div class="gallery" id="gallery"></div>
+
+</main>
+
+<div class="modal" id="modal">
+    <button class="close" onclick="closeModal()">×</button>
+
+    <div class="modal-content">
+        <img id="modalImage" src="" alt="Paisagem ampliada">
+        <h2 id="modalTitle"></h2>
+        <p id="modalDescription"></p>
+    </div>
+</div>
+
+<footer>
+    <p>Site feito por vitin e GPT.</p>
+    <p style="margin-top:8px">Preserve a natureza. Preserve a vida.</p>
+</footer>
+
+<script>
+
+// FOTOGRAFIAS
+const photos = [
+    {
+        title: "Montanhas ao amanhecer",
+        category: "montanhas",
+        description: "A beleza das montanhas iluminadas pelo sol.",
+        image: "data:image/jpeg;base64,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"
+    },
+    {
+        title: "Lago entre montanhas",
+        category: "montanhas",
+        description: "Um cenário tranquilo cercado por grandes montanhas.",
+        image: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=900"
+    },
+    {
+        title: "Floresta verde",
+        category: "florestas",
+        description: "A riqueza e a diversidade das florestas.",
+        image: "https://images.unsplash.com/photo-1448375240586-882707db888b?w=900"
+    },
+    {
+        title: "Caminho na floresta",
+        category: "florestas",
+        description: "Uma trilha cercada pela vegetação natural.",
+        image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=900"
+    },
+    {
+        title: "Praia paradisíaca",
+        category: "praias",
+        description: "Águas cristalinas e uma paisagem incrível.",
+        image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900"
+    },
+    {
+        title: "Mar azul",
+        category: "praias",
+        description: "A imensidão do oceano em um dia ensolarado.",
+        image: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=900"
+    },
+    {
+        title: "Cachoeira natural",
+        category: "cachoeiras",
+        description: "A força e a beleza da água em movimento.",
+        image: "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?w=900"
+    },
+    {
+        title: "Queda d'água",
+        category: "cachoeiras",
+        description: "Uma paisagem natural cercada de vegetação.",
+        image: "https://images.unsplash.com/photo-1511497584788-876760111969?w=900"
+    },
+    {
+        title: "Paisagem nas montanhas",
+        category: "montanhas",
+        description: "A natureza vista de uma perspectiva extraordinária.",
+        image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900"
+    }
+];
+
+// FAVORITOS
+let favorites = JSON.parse(
+    localStorage.getItem("natureFavorites") || "[]"
+);
+
+let currentCategory = "todos";
+
+// ATUALIZAR CONTADOR
+function updateFavorites() {
+    document.getElementById("favoriteCount").textContent =
+        favorites.length;
+}
+
+// SALVAR FAVORITOS
+function saveFavorites() {
+    localStorage.setItem(
+        "natureFavorites",
+        JSON.stringify(favorites)
+    );
+
+    updateFavorites();
+}
+
+// ADICIONAR OU REMOVER FAVORITO
+function toggleFavorite(index, event) {
+    event.stopPropagation();
+
+    if (favorites.includes(index)) {
+        favorites = favorites.filter(item => item !== index);
+    } else {
+        favorites.push(index);
+    }
+
+    saveFavorites();
+    renderGallery();
+}
+
+// EXIBIR FOTOS
+function renderGallery() {
+    const gallery = document.getElementById("gallery");
+    const search = document.getElementById("search")
+        .value.toLowerCase();
+
+    gallery.innerHTML = "";
+
+    const filtered = photos
+        .map((photo, index) => ({...photo, index}))
+        .filter(photo => {
+            const categoryMatch =
+                currentCategory === "todos" ||
+                photo.category === currentCategory ||
+                (currentCategory === "favoritos" &&
+                favorites.includes(photo.index));
+
+            const searchMatch =
+                photo.title.toLowerCase().includes(search) ||
+                photo.category.toLowerCase().includes(search) ||
+                photo.description.toLowerCase().includes(search);
+
+            return categoryMatch && searchMatch;
+        });
+
+    if (filtered.length === 0) {
+        gallery.innerHTML =
+            '<div class="empty">Nenhuma fotografia encontrada. 🌿</div>';
+        return;
+    }
+
+    filtered.forEach(photo => {
+        const card = document.createElement("div");
+        card.className = "photo-card";
+
+        const image = document.createElement("img");
+        image.src = photo.image;
+        image.alt = photo.title;
+        image.loading = "lazy";
+
+        const favorite = document.createElement("button");
+        favorite.className = "favorite" +
+            (favorites.includes(photo.index) ? " active" : "");
+        favorite.textContent =
+            favorites.includes(photo.index) ? "♥" : "♡";
+
+        favorite.setAttribute("aria-label", "Adicionar aos favoritos");
+        favorite.onclick = event =>
+            toggleFavorite(photo.index, event);
+
+        const info = document.createElement("div");
+        info.className = "photo-info";
+
+        const title = document.createElement("h3");
+        title.textContent = photo.title;
+
+        const description = document.createElement("p");
+        description.textContent = photo.description;
+
+        info.append(title, description);
+        card.append(image, favorite, info);
+
+        card.onclick = () => openModal(photo);
+
+        gallery.appendChild(card);
+    });
+}
+
+// FILTROS
+document.querySelectorAll(".filters button").forEach(button => {
+    button.addEventListener("click", () => {
+        document.querySelectorAll(".filters button")
+            .forEach(btn => btn.classList.remove("active"));
+
+        button.classList.add("active");
+
+        currentCategory = button.dataset.category;
+
+        renderGallery();
+    });
+});
+
+// PESQUISA
+document.getElementById("search")
+    .addEventListener("input", renderGallery);
+
+// ABRIR FOTO AMPLIADA
+function openModal(photo) {
+    document.getElementById("modalImage").src = photo.image;
+    document.getElementById("modalTitle").textContent = photo.title;
+    document.getElementById("modalDescription").textContent =
+        photo.description;
+
+    document.getElementById("modal").classList.add("show");
+}
+
+// FECHAR FOTO
+function closeModal() {
+    document.getElementById("modal").classList.remove("show");
+}
+
+document.getElementById("modal").addEventListener("click", event => {
+    if (event.target.id === "modal") {
+        closeModal();
+    }
+});
+
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+        closeModal();
+    }
+});
+
+// INICIAR
+updateFavorites();
+renderGallery();
+
+</script>
+
+</body>
+</html>
+
+
